@@ -1,0 +1,63 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    font-family: sans-serif;
+  }
+  
+  #game {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-color: #222;
+  }
+  
+
+  
+  #stage {
+    color: white;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    z-index: 10;
+  }
+  
+  #countdown, #stageMessage {
+    color: white;
+    font-size: 80px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+  }
+  
+  #startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    padding: 15px 30px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    z-index: 30;
+  }
+  
+  .bar {
+    width: 100px; 
+    height: 100px;
+    background-color: red;
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transition: top linear;
+    cursor: pointer;
+  }
+  

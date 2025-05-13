@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>広告ゲーム</title>
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>広告ゲーム</h1>
+      <div class="game-buttons">
+        <p class="game-score">スコア読み込み中...</p>
+        <button onclick="startGame('aaa.html')">🎮 ゲーム1</button>
+        <p class="game-score">スコア読み込み中...</p>
+        <button onclick="startGame('aaa.html')">🎮 ゲーム2</button>
+        <p class="game-score">スコア読み込み中...</p>
+        <button onclick="startGame('aaa.html')">🎮 ゲーム3</button>
+        <p class="game-score">スコア読み込み中...</p>
+        <button onclick="startGame('aaa.html')">🎮 ゲーム4</button>
+      </div>
+    </div>
+
+    <script>
+      function startGame(url) {
+        location.href = url;
+      }
+
+      // スコア読み込みと表示
+      const lastScore = localStorage.getItem("lastScore");
+      const highScore = localStorage.getItem("highScore");
+
+      document.querySelectorAll(".game-score").forEach((e) => {
+        e.textContent = `ハイスコア: ${highScore}, 前回のスコア: ${lastScore}`;
+      });
+    </script>
+  </body>
+</html>
