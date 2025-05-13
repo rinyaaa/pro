@@ -5,19 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>広告ゲーム</title>
     <link rel="stylesheet" href="./style/home.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <h1>広告ゲーム</h1>
+
     <div class="container">
-      <h1>広告ゲーム</h1>
-      <div class="game-buttons">
-        <p class="game-score">スコア読み込み中...</p>
-        <button onclick="startGame('aaa.html')">🎮 ゲーム1</button>
-        <p class="game-score">スコア読み込み中...</p>
-        <button onclick="startGame('aaa.html')">🎮 ゲーム2</button>
-        <p class="game-score">スコア読み込み中...</p>
-        <button onclick="startGame('aaa.html')">🎮 ゲーム3</button>
-        <p class="game-score">スコア読み込み中...</p>
-        <button onclick="startGame('aaa.html')">🎮 ゲーム4</button>
+      <div class="left">
+        <div class="gameContainer">
+          <h3>棒落としクリック</h3>
+          <p class="maxScore">
+            <span class="maxNumber"></span>
+          </p>
+
+          <p class="lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('aaa.html')">プレイ</button>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="gameContainer">
+          <h3>棒落としクリック</h3>
+          <p class="maxScore">
+            <span class="maxNumber"></span>
+          </p>
+          <p class="lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('aaa.html')">プレイ</button>
+        </div>
+      </div>
+
+      <div class="left">
+        <div class="gameContainer">
+          <h3>棒落としクリック</h3>
+          <p class="maxScore">
+            <span class="maxNumber"></span>
+          </p>
+          <p class="lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('aaa.html')">プレイ</button>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="gameContainer">
+          <h3>棒落としクリック</h3>
+          <p class="maxScore">
+            <span class="maxNumber"></span>
+          </p>
+          <p class="lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('aaa.html')">プレイ</button>
+        </div>
       </div>
     </div>
 
@@ -30,8 +71,12 @@
       const lastScore = localStorage.getItem("lastScore");
       const highScore = localStorage.getItem("highScore");
 
-      document.querySelectorAll(".game-score").forEach((e) => {
-        e.textContent = `ハイスコア: ${highScore}, 前回のスコア: ${lastScore}`;
+      document.querySelectorAll(".maxNumber").forEach((e) => {
+        e.innerHTML = `MAX: <span class="number">${highScore}</span>`;
+      });
+
+      document.querySelectorAll(".lastNumber").forEach((e) => {
+        e.innerHTML = `LAST: <span class="number">${lastScore}</span>`;
       });
     </script>
   </body>

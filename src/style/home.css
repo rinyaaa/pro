@@ -1,45 +1,109 @@
-*{
+body {
+  font-family: "Rounded M+ 1c", "Noto Sans JP", sans-serif;
+  background-color: #FDE7BC;
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background: #121212;
-    color: #fff;
-    display: flex;
+h1 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: #333;
+  text-align: center;
+  color: #061852;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列のグリッドに */
+  gap: 30px;
+  margin-inline: 400px;
+
+  & > div {
+    display: grid;
+    align-content: center;
     justify-content: center;
-    margin-top: 50px;
-    height: 100vh;
+    width: auto;
   }
-  
-  .container {
-    text-align: center;
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-  } 
-  
-  .game-buttons button {
-    display: block;
-    margin: 1rem auto;
-    margin-top: 30px;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    background-color: #1e88e5;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .game-buttons button:hover {
-    background-color: #1565c0;
-  }
-  
-  .game-scoa{
-    text-align: center;
-    color: #fff;
-  }
+} 
+
+
+
+.gameContainer {
+  width: 220px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s;
+  background-color: #F3ECD4;
+  border: 0.5rem solid white;
+  border-radius: 20px; /* ここで角を丸くする */ 
+}
+
+.gameContainer:hover {
+  transform: scale(1.03);
+}
+
+.gameContainer h3 {
+  background-color: #4CAF50; 
+  color: white;
+  width: 260px;
+  height: 90px;
+ text-align: center;
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ color: black;
+  font-size: 20px;
+  border-radius: 12px 12px 0 0;
+  margin-top: 0;
+  margin-bottom: 16px;
+  position: relative;
+  bottom: 19px;
+  right: 20px;
+}
+
+
+.maxScore, .lastScore {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.lastScore {
+  color: #d32f2f; /* 赤系で強調 */
+}
+
+
+button {
+  margin-top: 16px;
+  padding: 20px 50px;
+  width: fit-content;
+  height: fit-content;
+  font-size: 26px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #2196F3;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #1976d2;
+}
+
+.maxScore ,
+.lastScore {
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+  font-size: 22px;
+  color: #011E10;
+  text-align: center;
+}
+
+.number{
+  color:red;
+}
+
