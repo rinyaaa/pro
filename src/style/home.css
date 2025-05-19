@@ -61,6 +61,18 @@ h1 {
   position: relative;
   bottom: 19px;
   right: 20px;
+
+}
+.orange h3{
+  background-color: orange;
+}
+
+.purple h3{
+  background-color: #A383B0;
+}
+
+.yellow h3{
+  background-color: #F6BB6A;
 }
 
 

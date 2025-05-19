@@ -5,6 +5,7 @@ const stageDisplay = document.getElementById("stage");
 const countdown = document.getElementById("countdown");
 const stageMessage = document.getElementById("stageMessage");
 const startButton = document.getElementById("startButton");
+const ruleButton = document.getElementById("ruleButton");
 
 function showStageMessage(text, callback) {
   stageMessage.textContent = text;
@@ -78,5 +79,9 @@ function startCountdown() {
 
 startButton.addEventListener("click", () => {
   startButton.style.display = "none";
+  ruleButton.style.display = "none";
+  game.style.backgroundImage = "url('../img/backNew.png')";
+  console.log("aaa" );
+
   startCountdown();
 });

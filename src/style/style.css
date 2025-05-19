@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+
     font-family: sans-serif;
   }
   
@@ -10,7 +10,10 @@ body {
     height: 100vh;
     overflow: hidden;
     position: relative;
-    background-color: #222;
+    background-image: url("../img/backImg2.png");
+    background-color: #659CCC    ;
+    background-size: contain;
+   
   }
   
 
@@ -42,12 +45,33 @@ body {
     transform: translate(-50%, -50%);
     font-size: 32px;
     padding: 15px 30px;
-    background-color: #28a745;
+    background-color: #FCEBCC;
     border: none;
     border-radius: 10px;
-    color: white;
+    color: black;
     cursor: pointer;
     z-index: 30;
+    width: fit-content;
+    padding: 20px 44px;
+    font-weight: bold;
+  }
+
+  #ruleButton{
+    font-weight: bold;
+    position: absolute;
+    top: 58%;
+    left:44%;
+    font-size: 25px;
+    padding: 15px 30px;
+    background-color: #DBD9D9;
+    border: none;
+    border-radius: 10px;
+    color: black;
+    cursor: pointer;
+    z-index: 30;
+    width: fit-content;
+    padding: 20px 25px;
+
   }
   
   .bar {
