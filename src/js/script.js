@@ -17,12 +17,13 @@ function showStageMessage(text, callback) {
 }
 
 function createBar() {
-  showStageMessage(`次はステージ${stage}です`, () => {
+  const messageText = stage === 1 ? "" : `次はステージ${stage}です`;
+  showStageMessage(messageText, () => {
     const bar = document.createElement("div");
     bar.classList.add("bar");
     game.appendChild(bar);
 
-    const speed = stage + 1500;
+    const speed = 1500 - stage * 50;
     bar.style.transitionDuration = `${speed}ms`;
 
     setTimeout(() => {
@@ -78,10 +79,15 @@ function startCountdown() {
 }
 
 startButton.addEventListener("click", () => {
-  startButton.style.display = "none";
-  ruleButton.style.display = "none";
-  game.style.backgroundImage = "url('../img/backNew.png')";
-  console.log("aaa" );
+  startButton.addEventListener("click", () => {
+    startButton.style.display = "none";
+    ruleButton.style.display = "none";
+    game.style.backgroundImage = "url('../img/backNew.png')";
 
+    stageDisplay.textContent = `ステージ: ${stage}`; // ★この行を追加
+    stageDisplay.style.display = "block"; // 必要に応じて、ステージ表示を常に表示する
+
+    startCountdown();
+  });
   startCountdown();
 });
