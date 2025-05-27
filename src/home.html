@@ -52,12 +52,12 @@
 
       <div class="right">
         <div class="gameContainer orange">
-          <h3>棒落としクリック</h3>
+          <h3>小野木</h3>
           <p class="maxScore">
             <span class="maxNumber"></span>
           </p>
-          <p class="lastScore"><span class="lastNumber"></span></p>
-          <button onclick="startGame('game.html')">プレイ</button>
+          <p id="game4lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('game4.html')">プレイ</button>
         </div>
       </div>
     </div>
@@ -71,14 +71,17 @@
       const game1 = localStorage.getItem("game1");
       const game2 = localStorage.getItem("game2");
       const game3 = localStorage.getItem("game3");
+      const game4 = localStorage.getItem("game4");
 
       const game1ScoreElement = document.getElementById("game1lastScore");
       const game2ScoreElement = document.getElementById("game2lastScore");
       const game3ScoreElement = document.getElementById("game3lastScore");
+      const game4ScoreElement = document.getElementById("game4lastScore");
 
       game1ScoreElement.textContent = parseInt(game1, 10); // 数値に変換して表示
       game2ScoreElement.textContent = parseInt(game2, 10); // 数値に変換して表示
       game3ScoreElement.textContent = parseInt(game3, 10); // 数値に変換して表示
+      game4ScoreElement.textContent = parseInt(game4, 10); // 数値に変換して表示
     </script>
   </body>
 </html>

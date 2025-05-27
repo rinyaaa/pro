@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>増減サバイバル</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #000;
+        overflow: hidden;
+      }
+      #gameContainer {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      #background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+      }
+      #stickman {
+        position: absolute;
+        left: 200px;
+        bottom: 150px;
+        width: 150px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .sword-container {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        border: 3px solid purple;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      .sword {
+        width: 100px;
+        height: 100px;
+      }
+      .number {
+        position: absolute;
+        top: -35px;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      #stickmanNumber {
+        position: absolute;
+        color: #4169e1;
+        font-size: 40px;
+        font-weight: bold;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #stageNumber {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      #timer {
+        position: absolute;
+        top: 30px;
+        right: 70px;
+        color: white;
+        font-size: 50px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      .key {
+        position: absolute;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+        transition: filter 0.1s;
+      }
+      .key.pressed {
+        filter: sepia(100%) saturate(500%) hue-rotate(10deg) brightness(120%);
+      }
+      #upKey {
+        left: 200px;
+        top: 80px;
+        width: 100px;
+        height: 100px;
+      }
+      #downKey {
+        left: 205px;
+        top: 180px;
+        width: 90px;
+        height: 90px;
+      }
+      #countdown,
+      #stageTransition {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 100px;
+        color: white;
+        display: none;
+      }
+      #stageClear {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 80px;
+        color: white;
+        display: none;
+        white-space: nowrap;
+      }
+      #startButton {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 40px;
+        font-size: 24px;
+        background-color: #4169e1;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <img id="background" src="./img/game4Back.jpg" alt="背景" />
+      <div id="stageNumber">STAGE 1</div>
+      <div id="timer">30</div>
+      <div id="stickman">
+        <div id="stickmanNumber"></div>
+        <img src="./img/bouhumen.png" alt="棒人間" />
+      </div>
+      <img id="upKey" class="key" src="./img/up.png" alt="上キー" />
+      <img id="downKey" class="key" src="./img/down.png" alt="下キー" />
+      <div id="countdown"></div>
+      <div id="stageTransition"></div>
+      <div id="stageClear"></div>
+      <button id="startButton">スタート</button>
+    </div>
+
+    <script>
+      const gameContainer = document.getElementById("gameContainer");
+      const stickmanNumber = document.getElementById("stickmanNumber");
+      const countdown = document.getElementById("countdown");
+      const startButton = document.getElementById("startButton");
+      const timer = document.getElementById("timer");
+
+      // ステージ遷移表示用の要素を追加
+      const stageTransition = document.createElement("div");
+      stageTransition.id = "stageTransition";
+      gameContainer.appendChild(stageTransition);
+
+      // ステージクリア表示用の要素を追加
+      const stageClear = document.createElement("div");
+      stageClear.id = "stageClear";
+      gameContainer.appendChild(stageClear);
+
+      let currentStage = 1;
+      let gameStarted = false;
+      let currentNumber = 0;
+      let selectedIndex = 0;
+      let swordContainers = [];
+      let timeLeft = 30;
+      let timerInterval;
+      let points = 0; // ポイントを管理する変数
+
+      function addPoints() {
+        points = Math.min(10, points + 2); // 2ポイント加算（上限10ポイント）
+
+        const currentTotalScore =
+          parseInt(localStorage.getItem("game4"), 10) || 0;
+
+        // 今回獲得したポイントをこれまでの合計スコアに加算
+        const newTotalScore = currentTotalScore + points;
+
+        // 新しい合計スコアをlocalStorageに保存（
+        localStorage.setItem("game4", newTotalScore.toString());
+
+        console.log("Current points:", points); // デバッグ用にコンソールに表示
+      }
+
+      function resetPoints() {
+        points = 0;
+        console.log("Points reset:", points); // デバッグ用にコンソールに表示
+      }
+
+      function createSwordContainers() {
+        const count = Math.floor(Math.random() * 2) + 3; // 3~4個のコンテナを生成
+        const containerWidth = 140;
+        const spacing = 25;
+        const startX = 450;
+        const startY = 500;
+
+        function generateSwordValues(count) {
+          const values = [];
+          const minPositive = 5; // 最小プラス値
+          const maxPositive = 20 + (currentStage - 1) * 10; // ステージごとに最大値増加
+          const minNegative = -100 - (currentStage - 1) * 20; // ステージごとにマイナス値も増加
+          const maxNegative = -5;
+
+          let hasNegative = false;
+
+          // 最初の剣は必ず通常のマイナス値（差数）
+          let value =
+            Math.random() < 0.5
+              ? -(Math.floor(Math.random() * 81) + 20) // -20～-100
+              : -(Math.floor(Math.random() * 16) + 5); // -5～-20
+          values.push({ value, isMultiply: false, isDivision: false });
+          hasNegative = true;
+
+          for (let i = 1; i < count; i++) {
+            const isBroken = Math.random() < 0.4; // 40%の確率で折れた剣
+            let value;
+            let isMultiply = false;
+            let isDivision = false;
+
+            if (isBroken) {
+              if (Math.random() < 0.3) {
+                // 30%の確率で割り算
+                value = -(Math.random() < 0.5 ? 2 : 3);
+                isDivision = true;
+              } else {
+                // より大きなマイナス値（-20～-100）か小さめのマイナス値（-5～-20）
+                value =
+                  Math.random() < 0.5
+                    ? -(Math.floor(Math.random() * 81) + 20)
+                    : -(Math.floor(Math.random() * 16) + 5);
+              }
+              hasNegative = true;
+            } else {
+              if (Math.random() < 0.3) {
+                // 30%の確率で乗数
+                value = Math.random() < 0.5 ? 2 : 3; // 2か3をランダムに選択
+                isMultiply = true;
+              } else {
+                value =
+                  Math.floor(Math.random() * (maxPositive - minPositive + 1)) +
+                  minPositive;
+              }
+            }
+            values.push({ value, isMultiply, isDivision });
+          }
+
+          // 値の順序をランダムに並び替え
+          for (let i = values.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [values[i], values[j]] = [values[j], values[i]];
+          }
+
+          function checkAllPossibilities(numbers, currentSum, index, used) {
+            if (index === numbers.length) {
+              return currentSum > 0;
+            }
+
+            if (currentSum < 0) {
+              if (currentSum < -100) {
+                return false;
+              }
+              let maxPossibleRecovery = 0;
+              for (let i = 0; i < numbers.length; i++) {
+                if (!used[i]) {
+                  if (numbers[i].isMultiply || numbers[i].isDivision) {
+                    continue;
+                  }
+                  maxPossibleRecovery +=
+                    numbers[i].value > 0 ? numbers[i].value : 0;
+                }
+              }
+              if (currentSum + maxPossibleRecovery <= 0) {
+                return false;
+              }
+            }
+
+            for (let i = 0; i < numbers.length; i++) {
+              if (!used[i]) {
+                used[i] = true;
+                let nextSum;
+                if (numbers[i].isMultiply) {
+                  nextSum = currentSum * numbers[i].value;
+                } else if (numbers[i].isDivision) {
+                  nextSum = Math.floor(currentSum / Math.abs(numbers[i].value));
+                } else {
+                  nextSum = currentSum + numbers[i].value;
+                }
+
+                if (checkAllPossibilities(numbers, nextSum, index + 1, used)) {
+                  used[i] = false;
+                  return true;
+                }
+                used[i] = false;
+              }
+            }
+            return false;
+          }
+
+          const initialNumber = Math.floor(Math.random() * 6) + 10; // 10~15の初期値
+          const used = new Array(values.length).fill(false);
+
+          const isPossible = checkAllPossibilities(
+            values,
+            initialNumber,
+            0,
+            used
+          );
+
+          return {
+            values: values,
+            initialNumber: initialNumber,
+            isPossible: isPossible,
+          };
+        }
+
+        let result;
+        do {
+          result = generateSwordValues(count);
+        } while (!result.isPossible);
+
+        currentNumber = result.initialNumber;
+        stickmanNumber.textContent = currentNumber;
+
+        for (let i = 0; i < count; i++) {
+          const container = document.createElement("div");
+          container.className = "sword-container";
+          container.style.right = `${startX}px`;
+          container.style.bottom = `${
+            startY - (containerWidth + spacing) * i
+          }px`;
+
+          const value = result.values[i];
+          const isBroken = !value.isMultiply && value.value < 0;
+
+          const sword = document.createElement("img");
+          sword.className = "sword";
+          sword.src = isBroken ? "./img/sowd.png" : "俺は負剣.png";
+
+          const number = document.createElement("div");
+          number.className = "number";
+          if (value.isMultiply) {
+            number.textContent = `×${value.value}`;
+          } else if (value.isDivision) {
+            number.textContent = `÷${Math.abs(value.value)}`;
+          } else {
+            number.textContent =
+              value.value > 0 ? `+${value.value}` : value.value;
+          }
+          number.dataset.value = value.value;
+          number.dataset.isMultiply = value.isMultiply;
+          number.dataset.isDivision = value.isDivision;
+
+          container.appendChild(sword);
+          container.appendChild(number);
+          gameContainer.appendChild(container);
+          swordContainers.push(container);
+        }
+      }
+
+      function startTimer() {
+        if (!timerInterval) {
+          // タイマーが動いていない場合のみ開始
+          timeLeft = 30;
+          timer.textContent = timeLeft;
+
+          timerInterval = setInterval(() => {
+            timeLeft--;
+            timer.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              timerInterval = null;
+              gameStarted = false;
+              setTimeout(() => {
+                alert(
+                  "時間切れ！\nSTAGE " + currentStage + " に再挑戦します。"
+                );
+                resetGame(false);
+                startGame();
+              }, 100);
+            }
+          }, 1000);
+        }
+      }
+
+      function startGame() {
+        startButton.style.display = "none";
+        if (currentStage === 1) {
+          countdown.style.display = "block";
+          let count = 3;
+
+          function updateCountdown() {
+            if (count > 0) {
+              countdown.textContent = count;
+              count--;
+              setTimeout(updateCountdown, 1000);
+            } else {
+              countdown.style.display = "none";
+              initializeGame();
+            }
+          }
+
+          updateCountdown();
+        } else {
+          initializeGame();
+        }
+      }
+
+      function initializeGame() {
+        gameStarted = true;
+        createSwordContainers();
+        updateSelection();
+        startTimer();
+      }
+
+      function updateSelection() {
+        swordContainers.forEach((container, index) => {
+          container.style.border =
+            index === selectedIndex ? "3px solid yellow" : "3px solid purple";
+        });
+      }
+
+      function selectSword() {
+        if (selectedIndex >= 0 && selectedIndex < swordContainers.length) {
+          const container = swordContainers[selectedIndex];
+          const numberElement = container.querySelector(".number");
+          const value = parseInt(numberElement.dataset.value);
+          const isMultiply = numberElement.dataset.isMultiply === "true";
+          const isDivision = numberElement.dataset.isDivision === "true";
+
+          if (isMultiply) {
+            currentNumber *= value;
+          } else if (isDivision) {
+            currentNumber = Math.floor(currentNumber / Math.abs(value));
+          } else {
+            currentNumber += value;
+          }
+          stickmanNumber.textContent = currentNumber;
+
+          gameContainer.removeChild(container);
+          swordContainers.splice(selectedIndex, 1);
+
+          const minBottom = Math.min(
+            ...swordContainers.map((container) =>
+              parseInt(container.style.bottom.replace("px", ""))
+            )
+          );
+
+          const sortedContainers = [...swordContainers].sort(
+            (a, b) =>
+              parseInt(b.style.bottom.replace("px", "")) -
+              parseInt(a.style.bottom.replace("px", ""))
+          );
+
+          swordContainers = sortedContainers;
+
+          swordContainers.forEach((container, index) => {
+            container.style.bottom = `${
+              minBottom + 140 * (swordContainers.length - 1 - index)
+            }px`;
+          });
+
+          if (selectedIndex >= swordContainers.length) {
+            selectedIndex = swordContainers.length - 1;
+          }
+          updateSelection();
+
+          if (currentNumber < 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            setTimeout(() => {
+              alert(
+                "ゲームオーバー！数字がマイナスになりました。\nSTAGE " +
+                  currentStage +
+                  " に再挑戦します。"
+              );
+              resetGame(false);
+              startGame();
+            }, 500);
+            return;
+          }
+
+          if (swordContainers.length === 0) {
+            setTimeout(() => {
+              addPoints(); // ステージクリア時にポイント加算
+              stageClear.textContent = `ステージ${currentStage}クリア！`;
+              stageClear.style.display = "block";
+
+              setTimeout(() => {
+                stageClear.style.display = "none";
+                currentStage++;
+                document.getElementById("stageNumber").textContent =
+                  "STAGE " + currentStage;
+                stageTransition.textContent = "STAGE " + currentStage;
+                stageTransition.style.display = "block";
+
+                setTimeout(() => {
+                  stageTransition.style.display = "none";
+                  resetGame(false);
+                  setTimeout(() => {
+                    startGame();
+                  }, 500);
+                }, 2000);
+              }, 2000);
+            }, 500);
+          }
+        }
+      }
+
+      function resetGame(resetStage = true) {
+        gameStarted = false;
+        currentNumber = 0;
+        selectedIndex = 0;
+        if (resetStage) {
+          currentStage = 1;
+          document.getElementById("stageNumber").textContent = "STAGE 1";
+          clearInterval(timerInterval);
+          timerInterval = null;
+          timer.textContent = "30";
+          resetPoints(); // ゲームリセット時にポイントもリセット
+        }
+        swordContainers.forEach((container) =>
+          gameContainer.removeChild(container)
+        );
+        swordContainers = [];
+        stickmanNumber.textContent = "";
+        countdown.style.display = "none";
+        startButton.style.display = resetStage ? "block" : "none";
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (!gameStarted) return;
+
+        const upKey = document.getElementById("upKey");
+        const downKey = document.getElementById("downKey");
+
+        switch (e.key) {
+          case "ArrowUp":
+            upKey.classList.add("pressed");
+            setTimeout(() => upKey.classList.remove("pressed"), 100);
+            selectedIndex = Math.max(0, selectedIndex - 1);
+            updateSelection();
+            break;
+          case "ArrowDown":
+            downKey.classList.add("pressed");
+            setTimeout(() => downKey.classList.remove("pressed"), 100);
+            selectedIndex = Math.min(
+              swordContainers.length - 1,
+              selectedIndex + 1
+            );
+            updateSelection();
+            break;
+          case "Enter":
+            selectSword();
+            break;
+        }
+      });
+
+      startButton.addEventListener("click", startGame);
+    </script>
+  </body>
+</html>
