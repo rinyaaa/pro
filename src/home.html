@@ -23,19 +23,19 @@
             <span class="maxNumber"></span>
           </p>
 
-          <p class="lastScore"><span class="lastNumber"></span></p>
+          <p id="game1lastScore"><span class="lastNumber"></span></p>
           <button onclick="startGame('game.html')">プレイ</button>
         </div>
       </div>
 
       <div class="right">
         <div class="gameContainer yellow">
-          <h3>棒落としクリック</h3>
+          <h3>ブロック起き</h3>
           <p class="maxScore">
             <span class="maxNumber"></span>
           </p>
-          <p class="lastScore"><span class="lastNumber"></span></p>
-          <button onclick="startGame('aaa.html')">プレイ</button>
+          <p id="game2lastScore"><span class="lastNumber"></span></p>
+          <button onclick="startGame('test6.html')">プレイ</button>
         </div>
       </div>
 
@@ -67,17 +67,15 @@
         location.href = url;
       }
 
-      // スコア読み込みと表示
-      const lastScore = localStorage.getItem("lastScore");
-      const highScore = localStorage.getItem("highScore");
+      // スコアを持ってきてる
+      const game1 = localStorage.getItem("game1");
+      const game2 = localStorage.getItem("game2");
 
-      document.querySelectorAll(".maxNumber").forEach((e) => {
-        e.innerHTML = `MAX: <span class="number">${highScore}</span>`;
-      });
+      const game1ScoreElement = document.getElementById("game1lastScore");
+      const game2ScoreElement = document.getElementById("game2lastScore");
 
-      document.querySelectorAll(".lastNumber").forEach((e) => {
-        e.innerHTML = `LAST: <span class="number">${lastScore}</span>`;
-      });
+      game1ScoreElement.textContent = parseInt(game1, 10); // 数値に変換して表示
+      game2ScoreElement.textContent = parseInt(game2, 10); // 数値に変換して表示
     </script>
   </body>
 </html>

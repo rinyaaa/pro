@@ -19,17 +19,31 @@ function showStageMessage(text, callback) {
 function createBar() {
   const messageText = stage === 1 ? "" : `次はステージ${stage}です`;
   showStageMessage(messageText, () => {
+    // ステージが10を超えているかチェックする
+    if (stage > 10) {
+      alert(
+        `ゲームクリア！全てのステージをクリアしました！\n最終ポイント: ${point}`
+      );
+      stageMessage.textContent = `ゲームクリア！全てのステージをクリアしました！\n最終ポイント: ${point}`;
+      const game1Score = parseInt(localStorage.getItem("game1"), 10) || 0;
+
+      const newTotalScore = game1Score + point;
+      localStorage.setItem("game1", newTotalScore.toString());
+
+      location.href = "kou.html"; // 広告へ
+      return; // ここで関数の実行を停止
+    }
+
     const bar = document.createElement("div");
     bar.classList.add("bar");
     game.appendChild(bar);
 
-    // ゲームエリア内で、棒の幅を考慮して配置します
     const gameWidth = game.clientWidth;
     const barWidth = 80; // CSSで設定している棒のwidth
     const randomLeft = Math.floor(Math.random() * (gameWidth - barWidth));
     bar.style.left = `${randomLeft}px`;
 
-    const speed = 1500 - stage * 50;
+    const speed = 1500 - stage * 100;
     bar.style.transitionDuration = `${speed}ms`;
 
     setTimeout(() => {
@@ -51,11 +65,11 @@ function createBar() {
         alert(`ゲームオーバー！到達ステージ: ${stage}\nポイントは: ${point}`);
 
         // スコア保存
-        localStorage.setItem("lastScore", point);
-        const highScore = localStorage.getItem("highScore") || 0;
-        if (point > highScore) {
-          localStorage.setItem("highScore", point);
-        }
+
+        const game1Score = parseInt(localStorage.getItem("game1"), 10) || 0;
+
+        const newTotalScore = game1Score + point;
+        localStorage.setItem("game1", newTotalScore.toString());
 
         //広告に行く
         location.href = "kou.html";
@@ -89,7 +103,7 @@ startButton.addEventListener("click", () => {
   ruleButton.style.display = "none";
   game.style.backgroundImage = "url('../img/backNew.png')";
 
-  stageDisplay.textContent = `ステージ: ${stage}`; // ★この行を追加
+  stageDisplay.textContent = `ステージ: ${stage}`;
   stageDisplay.style.display = "block"; // 必要に応じて、ステージ表示を常に表示する
 
   startCountdown();
