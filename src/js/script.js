@@ -79,15 +79,12 @@ function startCountdown() {
 }
 
 startButton.addEventListener("click", () => {
-  startButton.addEventListener("click", () => {
-    startButton.style.display = "none";
-    ruleButton.style.display = "none";
-    game.style.backgroundImage = "url('../img/backNew.png')";
+  startButton.style.display = "none";
+  ruleButton.style.display = "none";
+  game.style.backgroundImage = "url('../img/backNew.png')";
 
-    stageDisplay.textContent = `ステージ: ${stage}`; // ★この行を追加
-    stageDisplay.style.display = "block"; // 必要に応じて、ステージ表示を常に表示する
+  stageDisplay.textContent = `ステージ: ${stage}`; // ★この行を追加
+  stageDisplay.style.display = "block"; // 必要に応じて、ステージ表示を常に表示する
 
-    startCountdown();
-  });
   startCountdown();
 });
