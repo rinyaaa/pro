@@ -23,10 +23,9 @@ function createBar() {
     bar.classList.add("bar");
     game.appendChild(bar);
 
-    // 棒のランダムなleft位置を計算
     // ゲームエリア内で、棒の幅を考慮して配置します
     const gameWidth = game.clientWidth;
-    const barWidth = 80; // CSSで設定している棒の幅
+    const barWidth = 80; // CSSで設定している棒のwidth
     const randomLeft = Math.floor(Math.random() * (gameWidth - barWidth));
     bar.style.left = `${randomLeft}px`;
 
