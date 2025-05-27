@@ -1,0 +1,141 @@
+h1 {
+  font-size: 48px;     /* ← サイズを大きく（例：32px～60pxくらいで調整） */
+  font-weight: bold;   /* ← 太字にする */
+  text-align: center;  /* ← 中央揃え（必要に応じて） */
+  margin-top: 40px;    /* ← 上の余白（任意） */
+}
+
+
+.bar-wrapper {
+  position: relative;
+  width: 80%;
+  height: 80px;
+  background-color: #444;
+  margin: 50px auto;
+  border-radius: 8px;
+  overflow: visible;
+}
+
+#bombImage {
+  position: absolute;
+  top: -445px;
+  left: -730px; /* ← 爆弾を左にはみ出させる */
+  height: 1000px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#fuseBar {
+  position: relative;  /* ← sparkが相対的に動けるように */
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    #a0522d,   /* 焦げ茶（縄っぽい色） */
+    #a0522d 5px,
+    #8b4513 5px,
+    #8b4513 10px
+  );
+  height: 100%;
+  background-color: red;
+  width: 100%;
+  transition: width linear;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+#timeLimitDisplay {
+  font-size: 1.5em;      /* ← 大きさ（例: 1.2em〜2emで調整可能） */
+  font-weight: bold;     /* ← 太字にする */
+  margin-bottom: 20px;   /* ← お好みで下に余白も追加可能 */
+  text-align: center;    /* ← 中央に揃えたい場合 */
+}
+
+#toggleButton {
+  display: block;          /* 中央寄せのために block 要素にする */
+  margin: 30px auto;       /* 上下に余白＋中央寄せ */
+  padding: 20px 50px;      /* ボタンの内側のスペース（大きさ） */
+  font-size: 2em;        /* 文字サイズ大きめ */
+  font-weight: bold;       /* 太字で目立たせる */
+  border-radius: 12px;     /* 角を丸める */
+  background-color: #eee;  /* 背景色（お好みで変更OK） */
+  color: #000;             /* 文字色 */
+  border: none;            /* 枠線なし（必要なら付けてもOK） */
+  cursor: pointer;         /* カーソルをポインターに */
+  transition: all 0.2s;    /* ホバー時の滑らかな動き */
+}
+
+#toggleButton:hover {
+  background-color: #ddd;  /*ボタン上にカーソルがある時に色を変化させる*/
+}
+
+#spark {
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(
+    circle,
+    red 0%,
+    orange 30%,
+    yellow 60%,
+    rgb(251, 139, 52) 100%
+  );
+  border-radius: 50%;
+  animation: flicker 0.3s infinite;
+}
+
+
+
+
+@keyframes flicker {
+  0%   { opacity: 1; transform: translateY(-50%) scale(1); }
+  50%  { opacity: 0.5; transform: translateY(-50%) scale(1.2); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1); }
+}
+
+#ruleButton {
+  position: fixed;
+  bottom: 200px; /* ルールボックスの上に表示 */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #eef;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+
+#ruleBox {
+  display: none;
+  position: fixed;           /* 固定表示 */
+  bottom: 60px;              /* 画面下から20px */
+  left: 50%;                 /* 中央寄せのため左50% */
+  transform: translateX(-50%); /* 横方向中央揃え */
+  width: 80%;
+  max-width: 500px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  font-size: 14px;
+  z-index: 10;               /* 他の要素より前面に表示 */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  opacity: 0;               /* アニメーション用に追加 */
+  pointer-events: none;     /* 非表示中はクリックできない */
+  transition: opacity 0.3s ease;
+}
+#ruleBox.show {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body {
+  font-family: 'DotGothic16', sans-serif;
+}

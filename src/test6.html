@@ -17,7 +17,6 @@
         background-image: url("./img/back.png");
         background-size: cover;
         background-position: center;
-        zoom: 0.67;
       }
 
       #title-screen {
@@ -33,7 +32,6 @@
         justify-content: center;
         gap: 20px;
         z-index: 100;
-        zoom: 1.5;
       }
 
       #title-screen button {
@@ -252,7 +250,17 @@
       function updateScore(points) {
         score += points;
 
-        scoreDisplay.textContent = `スコア: ${score}`;
+        // localStorageに保存されているこれまでの合計スコアを取得し、数値に変換
+        const currentTotalScore =
+          parseInt(localStorage.getItem("game2"), 10) || 0;
+
+        // 今回獲得したポイントをこれまでの合計スコアに加算
+        const newTotalScore = currentTotalScore + score;
+
+        // 新しい合計スコアをlocalStorageに保存（
+        localStorage.setItem("game2", newTotalScore.toString());
+
+        scoreDisplay.textContent = `スコア: ${score}`; // 画面表示のスコアを更新
       }
 
       function initGrid() {

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ギリギリストップ</title>
+    <link rel="stylesheet" href="./style/style3.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <h1>🔥ギリギリストップ🔥</h1>
+    <p id="timeLimitDisplay">制限時間:</p>
+
+    <div class="bar-wrapper">
+      <img id="bombImage" src="./img/bomb.png" alt="爆弾" />
+      <div id="fuseBar">
+        <div id="spark"></div>
+      </div>
+    </div>
+
+    <button id="toggleButton">スタート</button>
+    <p id="score"></p>
+    <button id="ruleButton">ルール説明</button>
+    <div id="ruleBox">
+      <strong>🎮 ルール説明：</strong><br />
+      スタートボタンを押すと導火線が縮み始めます。<br />
+      （スタートすると、スタートボタンがストップボタンに変化）<br />
+      ギリギリでストップボタンを押すほど高得点！<br />
+      間に合わないと爆発して0点になります。
+    </div>
+
+    <script src="./js/game.js"></script>
+  </body>
+</html>
