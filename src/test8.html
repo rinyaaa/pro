@@ -1,407 +1,456 @@
 <!DOCTYPE html>
 <html lang="ja">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>基本型（スコア表示画面変更版）</title>
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('./img/pi_title.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            overflow: hidden;
-        }
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url("./img/back.png");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        overflow: hidden;
+      }
 
-        /* タイトル画面 */
-        #title-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: url('./img/pi_title.png');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
+      /* タイトル画面 */
+      #title-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("./img/pi_title.png");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
 
-        /* 改良したスタートボタンのデザイン */
-        #start-btn {
-            position: absolute;
-            width: 400px;
-            height: 74px;
-            font-size: 1.5em;
-            color: #fff;
-            cursor: pointer;
-            user-select: none;
-            border: none;
-            border-radius: 37px;
-            background: linear-gradient(135deg, #1f1c2c, #928dab);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            top: 52%;
-            left: calc(50% - 200px);
-        }
+      /* 改良したスタートボタンのデザイン */
+      #start-btn {
+        position: absolute;
+        width: 400px;
+        height: 74px;
+        font-size: 1.5em;
+        color: #fff;
+        cursor: pointer;
+        user-select: none;
+        border: none;
+        border-radius: 37px;
+        background: linear-gradient(135deg, #1f1c2c, #928dab);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 52%;
+        left: calc(50% - 200px);
+      }
 
-        #start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(135deg, #2b5876, #4e4376);
-        }
+      #start-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, #2b5876, #4e4376);
+      }
 
-        #start-btn:active {
-            transform: scale(0.96);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+      #start-btn:active {
+        transform: scale(0.96);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
 
-        /* ゲーム画面用スタイル */
-        #game-content {
-            display: none;
-            padding: 13px;
-            box-sizing: border-box;
-            overflow: auto;
-            height: 100vh;
-        }
+      /* ゲーム画面用スタイル */
+      #game-content {
+        display: none;
+        padding: 13px;
+        box-sizing: border-box;
+        overflow: auto;
+        height: 100vh;
+      }
 
-        /* Score表示を大きく、フォントを柔らかく */
-        .score-display {
-            font-family: "Arial Rounded MT Bold", "ヒラギノ丸ゴ Pro W4", sans-serif;
-            font-size: 2em;
-            color: #ffecd1;
-            background-color: rgba(0, 0, 0, 0.4);
-            display: flex;
-            /* Flexboxで縦横中央揃え */
-            align-items: center;
-            /* ← 縦方向中央揃え */
-            justify-content: center;
-            /* ← 横方向中央揃え */
-            height: 48px;
-            /* 高さを制限 */
-            padding: 0 20px;
-            /* 横にだけパディング */
-            border-radius: 12px;
-            text-align: center;
-            margin: 13px auto;
-            width: fit-content;
-            /* 背景サイズを文字に合わせる */
-            text-shadow:
-                -1px -1px 0 #5c3d28,
-                1px -1px 0 #5c3d28,
-                -1px 1px 0 #5c3d28,
-                1px 1px 0 #5c3d28;
-        }
+      /* Score表示を大きく、フォントを柔らかく */
+      .score-display {
+        font-family: "Arial Rounded MT Bold", "ヒラギノ丸ゴ Pro W4", sans-serif;
+        font-size: 2em;
+        color: #ffecd1;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        /* Flexboxで縦横中央揃え */
+        align-items: center;
+        /* ← 縦方向中央揃え */
+        justify-content: center;
+        /* ← 横方向中央揃え */
+        height: 48px;
+        /* 高さを制限 */
+        padding: 0 20px;
+        /* 横にだけパディング */
+        border-radius: 12px;
+        text-align: center;
+        margin: 13px auto;
+        width: fit-content;
+        /* 背景サイズを文字に合わせる */
+        text-shadow: -1px -1px 0 #5c3d28, 1px -1px 0 #5c3d28, -1px 1px 0 #5c3d28,
+          1px 1px 0 #5c3d28;
+      }
 
+      .grid-area {
+        flex-shrink: 0;
+        width: fit-content;
+        margin: auto;
+        margin-bottom: 13px;
+      }
 
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(8, 74px);
+        grid-template-rows: repeat(8, 74px);
+        gap: 3px;
+        padding: 5px;
+        border: 4px solid #1a2c3d;
+        border-radius: 11px;
+        background-color: #243b55;
+      }
 
-        .grid-area {
-            flex-shrink: 0;
-            width: fit-content;
-            margin: auto;
-            margin-bottom: 13px;
-        }
+      .cell {
+        width: 74px;
+        height: 74px;
+        background-color: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(8, 74px);
-            grid-template-rows: repeat(8, 74px);
-            gap: 3px;
-            padding: 5px;
-            border: 4px solid #1a2c3d;
-            border-radius: 11px;
-            background-color: #243b55;
-        }
+      .block-selection {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 13px;
+      }
 
-        .cell {
-            width: 74px;
-            height: 74px;
-            background-color: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+      .block {
+        display: grid;
+        gap: 3px;
+        cursor: grab;
+      }
 
-        .block-selection {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 13px;
-        }
+      .block-cell {
+        width: 74px;
+        height: 74px;
+        background-image: url("./img/mokume.jpg");
+        background-size: cover;
+        background-position: center;
+        border-radius: 5px;
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+      }
 
-        .block {
-            display: grid;
-            gap: 3px;
-            cursor: grab;
-        }
+      .transparent-cell {
+        width: 74px;
+        height: 74px;
+        background-color: transparent;
+      }
 
-        .block-cell {
-            width: 74px;
-            height: 74px;
-            background-image: url('./img/mokume.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 5px;
-            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
-        }
+      /* Game Over画面を大きく */
+      .game-over-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.3);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        border-radius: 15px;
+        z-index: 200;
+      }
 
-        .transparent-cell {
-            width: 74px;
-            height: 74px;
-            background-color: transparent;
-        }
+      .game-over {
+        font-size: 3em;
+        color: red;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px black;
+      }
 
-        /* Game Over画面を大きく */
-        .game-over-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.3);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 40px;
-            border-radius: 15px;
-            z-index: 200;
-        }
+      #continue-btn {
+        align-items: center;
+        background-image: linear-gradient(
+          144deg,
+          #af40ff,
+          #5b42f3 50%,
+          #00ddeb
+        );
+        border: 0;
+        border-radius: 5px;
+        box-shadow: rgba(151, 65, 252, 0.2) 0 10px 20px -3px;
+        box-sizing: border-box;
+        color: #ffffff;
+        display: flex;
+        font-size: 14px;
+        justify-content: center;
+        line-height: 1em;
+        min-width: 110px;
+        padding: 6px;
+        user-select: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        transform: scale(1);
+      }
 
-        .game-over {
-            font-size: 3em;
-            color: red;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px black;
-        }
+      #continue-btn span {
+        background-color: rgb(5, 6, 45);
+        padding: 14px 20px;
+        border-radius: 6px;
+        display: inline-block;
+        text-align: center;
+        transition: 300ms;
+      }
 
-        #continue-btn {
-            align-items: center;
-            background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
-            border: 0;
-            border-radius: 5px;
-            box-shadow: rgba(151, 65, 252, 0.2) 0 10px 20px -3px;
-            box-sizing: border-box;
-            color: #ffffff;
-            display: flex;
-            font-size: 14px;
-            justify-content: center;
-            line-height: 1em;
-            min-width: 110px;
-            padding: 6px;
-            user-select: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            transform: scale(1);
-        }
+      #continue-btn:hover {
+        transform: scale(1.05);
+      }
 
-        #continue-btn span {
-            background-color: rgb(5, 6, 45);
-            padding: 14px 20px;
-            border-radius: 6px;
-            display: inline-block;
-            text-align: center;
-            transition: 300ms;
-        }
+      #continue-btn:hover span {
+        background: none;
+      }
 
-        #continue-btn:hover {
-            transform: scale(1.05);
-        }
-
-        #continue-btn:hover span {
-            background: none;
-        }
-
-        #continue-btn:active {
-            transform: scale(0.98);
-        }
+      #continue-btn:active {
+        transform: scale(0.98);
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="title-screen">
-        <button id="start-btn">ゲームスタート</button>
+      <button id="start-btn">ゲームスタート</button>
     </div>
 
     <div id="game-content">
-        <div class="score-display" id="score-display">スコア: 0</div>
-        <div class="grid-area">
-            <div class="grid" id="grid"></div>
-        </div>
-        <div class="block-selection" id="block-selection"></div>
+      <div class="score-display" id="score-display">スコア: 0</div>
+      <div class="grid-area">
+        <div class="grid" id="grid"></div>
+      </div>
+      <div class="block-selection" id="block-selection"></div>
 
-        <div class="game-over-container" id="game-over-container">
-            <div id="game-over" class="game-over">Game Over !</div>
-            <button id="continue-btn"><span>コンティニュー</span></button>
-        </div>
+      <div class="game-over-container" id="game-over-container">
+        <div id="game-over" class="game-over">Game Over !</div>
+        <button id="continue-btn"><span>コンティニュー</span></button>
+      </div>
     </div>
 
     <script>
-        const titleScreen = document.getElementById('title-screen');
-        const startBtn = document.getElementById('start-btn');
-        const gameContent = document.getElementById('game-content');
-        const continueBtn = document.getElementById('continue-btn');
-        const scoreDisplay = document.getElementById('score-display');
-        const grid = document.getElementById('grid');
-        const blockSelection = document.getElementById('block-selection');
-        const gameOverContainer = document.getElementById('game-over-container');
+      const titleScreen = document.getElementById("title-screen");
+      const startBtn = document.getElementById("start-btn");
+      const gameContent = document.getElementById("game-content");
+      const continueBtn = document.getElementById("continue-btn");
+      const scoreDisplay = document.getElementById("score-display");
+      const grid = document.getElementById("grid");
+      const blockSelection = document.getElementById("block-selection");
+      const gameOverContainer = document.getElementById("game-over-container");
 
-        const GRID_SIZE = 8;
-        const CELL_SIZE = 74;
-        let cells = [];
-        let score = 0;
-        const blockShapes = [
-            [[1, 1, 1], [0, 1, 0]],
-            [[1, 1, 1, 1, 1]],
-            [[1, 1], [1, 1]],
-            [[1, 1, 0], [0, 1, 1]],
-            [[0, 1, 1], [1, 1, 0]],
-            [[1, 0], [1, 0], [1, 1]],
-            [[0, 1], [0, 1], [1, 1]]
-        ];
+      const GRID_SIZE = 8;
+      const CELL_SIZE = 74;
+      let cells = [];
+      let score = 0;
+      const blockShapes = [
+        [
+          [1, 1, 1],
+          [0, 1, 0],
+        ],
+        [[1, 1, 1, 1, 1]],
+        [
+          [1, 1],
+          [1, 1],
+        ],
+        [
+          [1, 1, 0],
+          [0, 1, 1],
+        ],
+        [
+          [0, 1, 1],
+          [1, 1, 0],
+        ],
+        [
+          [1, 0],
+          [1, 0],
+          [1, 1],
+        ],
+        [
+          [0, 1],
+          [0, 1],
+          [1, 1],
+        ],
+      ];
 
-        startBtn.addEventListener('click', () => {
-            titleScreen.style.display = 'none';
-            gameContent.style.display = 'block';
-            initGrid();
-            fillBlockSelection();
-        });
-
-        function updateScore(points) {
-            score += points;
-            scoreDisplay.textContent = `Score: ${score}`;
-        }
-
-        function initGrid() {
-            grid.innerHTML = '';
-            cells = [];
-            for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.dataset.index = i;
-                grid.appendChild(cell);
-                cells.push(cell);
-            }
-            score = 0;
-            updateScore(0);
-        }
-
-        function createBlock(shape) {
-            const block = document.createElement('div');
-            block.className = 'block';
-            block.draggable = true;
-            block.dataset.shape = JSON.stringify(shape);
-            block.dataset.id = Math.random().toString(36).substr(2, 9);
-            block.style.gridTemplateColumns = `repeat(${shape[0].length}, ${CELL_SIZE}px)`;
-            block.style.gridTemplateRows = `repeat(${shape.length}, ${CELL_SIZE}px)`;
-            shape.forEach((row, dy) => row.forEach((v, dx) => {
-                const cell = document.createElement('div');
-                cell.className = v ? 'block-cell' : 'transparent-cell';
-                block.appendChild(cell);
-            }));
-            block.addEventListener('dragstart', e => {
-                const r = block.getBoundingClientRect();
-                e.dataTransfer.setData('text/plain', JSON.stringify({ shape, offsetX: e.clientX - r.left, offsetY: e.clientY - r.top, id: block.dataset.id }));
-            });
-            return block;
-        }
-
-        function fillBlockSelection() {
-            blockSelection.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const shape = blockShapes[Math.floor(Math.random() * blockShapes.length)];
-                blockSelection.appendChild(createBlock(shape));
-            }
-        }
-
-        grid.addEventListener('dragover', e => e.preventDefault());
-        grid.addEventListener('drop', e => {
-            e.preventDefault();
-            const { shape, offsetX, offsetY, id } = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const r = grid.getBoundingClientRect();
-            const x = Math.round((e.clientX - r.left - offsetX) / CELL_SIZE);
-            const y = Math.round((e.clientY - r.top - offsetY) / CELL_SIZE);
-            if (canPlace(x, y, shape)) {
-                place(x, y, shape);
-                const lines = clearLines();
-                updateScore(lines);
-                const b = [...blockSelection.children].find(el => el.dataset.id === id);
-                if (b) {
-                    const idx = [...blockSelection.children].indexOf(b);
-                    b.remove();
-                    const s = blockShapes[Math.floor(Math.random() * blockShapes.length)];
-                    blockSelection.insertBefore(createBlock(s), blockSelection.children[idx] || null);
-                }
-                checkGameOver();
-            }
-        });
-
-        function canPlace(sx, sy, shape) {
-            return shape.every((row, dy) =>
-                row.every((v, dx) => {
-                    if (!v) return true;
-                    const x = sx + dx, y = sy + dy;
-                    return x >= 0 && y >= 0 && x < GRID_SIZE && y < GRID_SIZE &&
-                        !cells[y * GRID_SIZE + x].classList.contains('block-cell');
-                }));
-        }
-
-        function place(sx, sy, shape) {
-            shape.forEach((row, dy) =>
-                row.forEach((v, dx) => {
-                    if (v) cells[(sy + dy) * GRID_SIZE + (sx + dx)]
-                        .classList.add('block-cell');
-                }));
-        }
-
-        function clearLines() {
-            let cnt = 0;
-            for (let y = 0; y < GRID_SIZE; y++) {
-                const row = cells.slice(y * GRID_SIZE, (y + 1) * GRID_SIZE);
-                if (row.every(c => c.classList.contains('block-cell'))) {
-                    row.forEach(c => c.classList.remove('block-cell'));
-                    cnt++;
-                }
-            }
-            for (let x = 0; x < GRID_SIZE; x++) {
-                const col = Array.from({ length: GRID_SIZE }, (_, i) =>
-                    cells[i * GRID_SIZE + x]);
-                if (col.every(c => c.classList.contains('block-cell'))) {
-                    col.forEach(c => c.classList.remove('block-cell'));
-                    cnt++;
-                }
-            }
-            return cnt;
-        }
-
-        function checkGameOver() {
-            const canAny = [...blockSelection.children].some(el => {
-                const shape = JSON.parse(el.dataset.shape);
-                for (let y = 0; y <= GRID_SIZE - shape.length; y++)
-                    for (let x = 0; x <= GRID_SIZE - shape[0].length; x++)
-                        if (canPlace(x, y, shape)) return true;
-                return false;
-            });
-            if (!canAny) gameOverContainer.style.display = 'flex';
-        }
-
-        continueBtn.addEventListener('click', () => {
-            gameOverContainer.style.display = 'none';
-            initGrid();
-            fillBlockSelection();
-        });
-
-        // 初期化
+      startBtn.addEventListener("click", () => {
+        titleScreen.style.display = "none";
+        gameContent.style.display = "block";
         initGrid();
         fillBlockSelection();
-    </script>
-</body>
+      });
 
+      function updateScore(points) {
+        score += points;
+        scoreDisplay.textContent = `Score: ${score}`;
+      }
+
+      function initGrid() {
+        grid.innerHTML = "";
+        cells = [];
+        for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.index = i;
+          grid.appendChild(cell);
+          cells.push(cell);
+        }
+        score = 0;
+        updateScore(0);
+      }
+
+      function createBlock(shape) {
+        const block = document.createElement("div");
+        block.className = "block";
+        block.draggable = true;
+        block.dataset.shape = JSON.stringify(shape);
+        block.dataset.id = Math.random().toString(36).substr(2, 9);
+        block.style.gridTemplateColumns = `repeat(${shape[0].length}, ${CELL_SIZE}px)`;
+        block.style.gridTemplateRows = `repeat(${shape.length}, ${CELL_SIZE}px)`;
+        shape.forEach((row, dy) =>
+          row.forEach((v, dx) => {
+            const cell = document.createElement("div");
+            cell.className = v ? "block-cell" : "transparent-cell";
+            block.appendChild(cell);
+          })
+        );
+        block.addEventListener("dragstart", (e) => {
+          const r = block.getBoundingClientRect();
+          e.dataTransfer.setData(
+            "text/plain",
+            JSON.stringify({
+              shape,
+              offsetX: e.clientX - r.left,
+              offsetY: e.clientY - r.top,
+              id: block.dataset.id,
+            })
+          );
+        });
+        return block;
+      }
+
+      function fillBlockSelection() {
+        blockSelection.innerHTML = "";
+        for (let i = 0; i < 3; i++) {
+          const shape =
+            blockShapes[Math.floor(Math.random() * blockShapes.length)];
+          blockSelection.appendChild(createBlock(shape));
+        }
+      }
+
+      grid.addEventListener("dragover", (e) => e.preventDefault());
+      grid.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const { shape, offsetX, offsetY, id } = JSON.parse(
+          e.dataTransfer.getData("text/plain")
+        );
+        const r = grid.getBoundingClientRect();
+        const x = Math.round((e.clientX - r.left - offsetX) / CELL_SIZE);
+        const y = Math.round((e.clientY - r.top - offsetY) / CELL_SIZE);
+        if (canPlace(x, y, shape)) {
+          place(x, y, shape);
+          const lines = clearLines();
+          updateScore(lines);
+          const b = [...blockSelection.children].find(
+            (el) => el.dataset.id === id
+          );
+          if (b) {
+            const idx = [...blockSelection.children].indexOf(b);
+            b.remove();
+            const s =
+              blockShapes[Math.floor(Math.random() * blockShapes.length)];
+            blockSelection.insertBefore(
+              createBlock(s),
+              blockSelection.children[idx] || null
+            );
+          }
+          checkGameOver();
+        }
+      });
+
+      function canPlace(sx, sy, shape) {
+        return shape.every((row, dy) =>
+          row.every((v, dx) => {
+            if (!v) return true;
+            const x = sx + dx,
+              y = sy + dy;
+            return (
+              x >= 0 &&
+              y >= 0 &&
+              x < GRID_SIZE &&
+              y < GRID_SIZE &&
+              !cells[y * GRID_SIZE + x].classList.contains("block-cell")
+            );
+          })
+        );
+      }
+
+      function place(sx, sy, shape) {
+        shape.forEach((row, dy) =>
+          row.forEach((v, dx) => {
+            if (v)
+              cells[(sy + dy) * GRID_SIZE + (sx + dx)].classList.add(
+                "block-cell"
+              );
+          })
+        );
+      }
+
+      function clearLines() {
+        let cnt = 0;
+        for (let y = 0; y < GRID_SIZE; y++) {
+          const row = cells.slice(y * GRID_SIZE, (y + 1) * GRID_SIZE);
+          if (row.every((c) => c.classList.contains("block-cell"))) {
+            row.forEach((c) => c.classList.remove("block-cell"));
+            cnt++;
+          }
+        }
+        for (let x = 0; x < GRID_SIZE; x++) {
+          const col = Array.from(
+            { length: GRID_SIZE },
+            (_, i) => cells[i * GRID_SIZE + x]
+          );
+          if (col.every((c) => c.classList.contains("block-cell"))) {
+            col.forEach((c) => c.classList.remove("block-cell"));
+            cnt++;
+          }
+        }
+        return cnt;
+      }
+
+      function checkGameOver() {
+        const canAny = [...blockSelection.children].some((el) => {
+          const shape = JSON.parse(el.dataset.shape);
+          for (let y = 0; y <= GRID_SIZE - shape.length; y++)
+            for (let x = 0; x <= GRID_SIZE - shape[0].length; x++)
+              if (canPlace(x, y, shape)) return true;
+          return false;
+        });
+        if (!canAny) gameOverContainer.style.display = "flex";
+      }
+
+      continueBtn.addEventListener("click", () => {
+        gameOverContainer.style.display = "none";
+        initGrid();
+        fillBlockSelection();
+      });
+
+      // 初期化
+      initGrid();
+      fillBlockSelection();
+    </script>
+  </body>
 </html>

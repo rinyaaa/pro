@@ -33,32 +33,38 @@
     <button onclick="backHome('home.html')">ホーム画面へ</button>
 
     <div class="videoWrapper">
-      <video id="gameVideo" muted playsinline>
-        <source src="./mov/game2.mov" type="video/webm" />
-        <source src="./mov/game2.mov" type="video/mp4" />
-      </video>
+      <video id="gameVideo" muted playsinline></video>
       <div class="clickLayer" onclick="handleClick()"></div>
     </div>
 
     <script>
+      const video = document.getElementById("gameVideo");
       let hasUnmuted = false;
+
+      // 動画と対応する遷移先ページをペアで定義
+      const videoOptions = [
+        { video: "./mov/game2.mov", target: "test8.html" },
+        { video: "./mov/game3.mov", target: "index.html" },
+        // { video: "./mov/game4.mov", target: "index3.html" },
+      ];
+
+      // ランダムに1つ選択
+      const selected =
+        videoOptions[Math.floor(Math.random() * videoOptions.length)];
+      video.src = selected.video;
 
       function backHome(url) {
         location.href = url;
       }
 
       function handleClick() {
-        const video = document.getElementById("gameVideo");
-
         if (!hasUnmuted) {
-          // 1回目のクリック：音声ON
           video.muted = false;
           video.currentTime = 0;
           video.play();
           hasUnmuted = true;
         } else {
-          // 2回目のクリック：遷移
-          backHome("index.html");
+          backHome(selected.target); // 対応するindexへ遷移
         }
       }
     </script>
