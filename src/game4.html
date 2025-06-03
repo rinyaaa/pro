@@ -181,6 +181,45 @@
         max-width: 80%;
         width: 600px;
       }
+      #gameOverContent {
+        text-align: center;
+      }
+      #gameOverContent h2 {
+        color: #FF0000;
+        font-size: 48px;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      #gameOverContent p {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 40px;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+      }
+      #retryButton {
+        padding: 15px 40px;
+        font-size: 20px;
+        background-color: #4169e1;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      #retryButton:hover {
+        background-color: #1e90ff;
+      }
+      #returnButton {
+        padding: 15px 40px;
+        font-size: 20px;
+        background-color: #4169e1;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      #returnButton:hover {
+        background-color: #1e90ff;
+      }
       #rulesContent h2 {
         color: #4169e1;
         margin-bottom: 20px;
@@ -209,33 +248,6 @@
       }
       #closeRules:hover {
         color: #000;
-      }
-      #gameOverContent {
-        text-align: center;
-      }
-      #gameOverContent h2 {
-        color: #FF0000;
-        font-size: 48px;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      }
-      #gameOverContent p {
-        color: #333;
-        font-size: 24px;
-        margin-bottom: 40px;
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-      }
-      #retryButton {
-        padding: 15px 40px;
-        font-size: 20px;
-        background-color: #4169e1;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-      }
-      #retryButton:hover {
-        background-color: #1e90ff;
       }
     </style>
   </head>
@@ -288,6 +300,7 @@
           <h2>ゲームオーバー！</h2>
           <p>数字がマイナスになってしまいました</p>
           <button id="retryButton">もう一度挑戦する</button>
+          <button id="returnButton"><a href="home.html">ホームに戻る</a></button>
         </div>
       </div>
     </div>
