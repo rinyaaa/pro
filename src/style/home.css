@@ -13,6 +13,21 @@ h1 {
   color: #061852;
 }
 
+
+
+.score{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.keiNumber{
+  font-size: 25px;
+  font-weight: bold;
+  
+}
+
 .container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2列のグリッドに */
