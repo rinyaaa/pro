@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>基本型（スコア表示画面変更版）</title>
+    <title>基本型（スコア表示画面変更、BGM追加版）</title>
     <style>
       body {
         font-family: sans-serif;
@@ -176,55 +176,56 @@
         text-shadow: 2px 2px 4px black;
       }
 
-      #continue-btn {
-        align-items: center;
-        background-image: linear-gradient(
-          144deg,
-          #af40ff,
-          #5b42f3 50%,
-          #00ddeb
-        );
-        border: 0;
-        border-radius: 5px;
-        box-shadow: rgba(151, 65, 252, 0.2) 0 10px 20px -3px;
-        box-sizing: border-box;
-        color: #ffffff;
-        display: flex;
-        font-size: 14px;
-        justify-content: center;
-        line-height: 1em;
-        min-width: 110px;
-        padding: 6px;
-        user-select: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        transform: scale(1);
-      }
+      /* #continue-btn {
+            align-items: center;
+            background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+            border: 0;
+            border-radius: 5px;
+            box-shadow: rgba(151, 65, 252, 0.2) 0 10px 20px -3px;
+            box-sizing: border-box;
+            color: #ffffff;
+            display: flex;
+            font-size: 14px;
+            justify-content: center;
+            line-height: 1em;
+            min-width: 110px;
+            padding: 6px;
+            user-select: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: scale(1);
+        } */
 
-      #continue-btn span {
-        background-color: rgb(5, 6, 45);
-        padding: 14px 20px;
-        border-radius: 6px;
-        display: inline-block;
-        text-align: center;
-        transition: 300ms;
-      }
+      /* #continue-btn span {
+            background-color: rgb(5, 6, 45);
+            padding: 14px 20px;
+            border-radius: 6px;
+            display: inline-block;
+            text-align: center;
+            transition: 300ms;
+        }
 
-      #continue-btn:hover {
-        transform: scale(1.05);
-      }
+        #continue-btn:hover {
+            transform: scale(1.05);
+        }
 
-      #continue-btn:hover span {
-        background: none;
-      }
+        #continue-btn:hover span {
+            background: none;
+        }
 
-      #continue-btn:active {
-        transform: scale(0.98);
-      }
+        #continue-btn:active {
+            transform: scale(0.98);
+        } */
     </style>
   </head>
 
   <body>
+    <audio
+      id="bgm"
+      src="./sounds/Secret_Talk_2.mp3"
+      loop
+      preload="auto"
+    ></audio>
     <div id="title-screen">
       <button id="start-btn">ゲームスタート</button>
     </div>
@@ -238,7 +239,7 @@
 
       <div class="game-over-container" id="game-over-container">
         <div id="game-over" class="game-over">Game Over !</div>
-        <button id="continue-btn"><span>コンティニュー</span></button>
+        <!-- <button id="continue-btn"><span>コンティニュー</span></button> -->
       </div>
     </div>
 
@@ -291,6 +292,7 @@
         gameContent.style.display = "block";
         initGrid();
         fillBlockSelection();
+        bgm.play().catch((e) => console.warn("BGM再生に失敗：", e));
       });
 
       function updateScore(points) {
@@ -439,7 +441,13 @@
               if (canPlace(x, y, shape)) return true;
           return false;
         });
-        if (!canAny) gameOverContainer.style.display = "flex";
+        if (!canAny) {
+          gameOverContainer.style.display = "flex";
+
+          setTimeout(() => {
+            location.href = "./kou/kou2.html"; // ← gameover時にページ遷移
+          }, 5000);
+        }
       }
 
       continueBtn.addEventListener("click", () => {

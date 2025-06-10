@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>増減サバイバル</title>
+    <title>増減ソード</title>
     <style>
       body {
         margin: 0;
@@ -61,20 +61,41 @@
         font-weight: bold;
       }
       .number.positive {
-        color: #00EEFF;
+        color: #00eeff;
       }
       .number.negative {
-        color: #FF0000;
+        color: #ff0000;
       }
       #stickmanNumber {
         position: absolute;
-        color: #3B79FF;
+        color: #3b79ff;
         font-size: 40px;
         font-weight: bold;
         text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
         top: -50px;
         left: 50%;
         transform: translateX(-50%);
+      }
+      #selectedNumber {
+        position: absolute;
+        font-size: 36px;
+        font-weight: bold;
+        text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s, top 0.5s;
+      }
+      #selectedNumber.show {
+        opacity: 1;
+        top: -120px;
+      }
+      #selectedNumber.positive {
+        color: #00eeff;
+      }
+      #selectedNumber.negative {
+        color: #ff0000;
       }
       #stageNumber {
         position: absolute;
@@ -156,13 +177,13 @@
         transform: translate(-50%, -50%);
         padding: 15px 30px;
         font-size: 20px;
-        background-color: #32CD32;
+        background-color: #32cd32;
         color: white;
         border: none;
         border-radius: 10px;
         cursor: pointer;
       }
-      #rulesOverlay, #gameOverOverlay {
+      #rulesOverlay {
         display: none;
         position: fixed;
         top: 0;
@@ -172,7 +193,7 @@
         background-color: rgba(255, 255, 255, 0.9);
         z-index: 1000;
       }
-      #rulesContent, #gameOverContent {
+      #rulesContent {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -180,45 +201,6 @@
         padding: 30px;
         max-width: 80%;
         width: 600px;
-      }
-      #gameOverContent {
-        text-align: center;
-      }
-      #gameOverContent h2 {
-        color: #FF0000;
-        font-size: 48px;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-      }
-      #gameOverContent p {
-        color: #333;
-        font-size: 24px;
-        margin-bottom: 40px;
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-      }
-      #retryButton {
-        padding: 15px 40px;
-        font-size: 20px;
-        background-color: #4169e1;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-      }
-      #retryButton:hover {
-        background-color: #1e90ff;
-      }
-      #returnButton {
-        padding: 15px 40px;
-        font-size: 20px;
-        background-color: #4169e1;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-      }
-      #returnButton:hover {
-        background-color: #1e90ff;
       }
       #rulesContent h2 {
         color: #4169e1;
@@ -249,6 +231,16 @@
       #closeRules:hover {
         color: #000;
       }
+      #gameVideo {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        z-index: 1000;
+      }
     </style>
   </head>
   <body>
@@ -258,6 +250,7 @@
       <div id="timer">30</div>
       <div id="stickman">
         <div id="stickmanNumber"></div>
+        <div id="selectedNumber"></div>
         <img src="./img/bouhumen.png" alt="棒人間" />
       </div>
       <img id="upKey" class="key" src="./img/up.png" alt="上キー" />
@@ -267,12 +260,17 @@
       <div id="stageClear"></div>
       <button id="startButton">スタート</button>
       <button id="rulesButton">ルール説明</button>
+      <video id="gameVideo">
+        <source src="./mov/game4.mov" type="video/mp4" />
+      </video>
       <div id="rulesOverlay">
         <div id="rulesContent">
           <button id="closeRules">×</button>
           <h2>【ゲームのルール】</h2>
           <div class="rule-section">
-            <p>1. 棒人間の数字がマイナスにならないように全ての剣をゲットしよう！</p>
+            <p>
+              1. 棒人間の数字がマイナスにならないように全ての剣をゲットしよう！
+            </p>
           </div>
           <div class="rule-section">
             <p>2. 剣には4つの種類があるよ：</p>
@@ -295,14 +293,6 @@
           </div>
         </div>
       </div>
-      <div id="gameOverOverlay">
-        <div id="gameOverContent">
-          <h2>ゲームオーバー！</h2>
-          <p>数字がマイナスになってしまいました</p>
-          <button id="retryButton">もう一度挑戦する</button>
-          <button id="returnButton"><a href="home.html">ホームに戻る</a></button>
-        </div>
-      </div>
     </div>
 
     <script>
@@ -313,9 +303,9 @@
       const rulesButton = document.getElementById("rulesButton");
       const rulesOverlay = document.getElementById("rulesOverlay");
       const closeRules = document.getElementById("closeRules");
-      const gameOverOverlay = document.getElementById("gameOverOverlay");
-      const retryButton = document.getElementById("retryButton");
       const timer = document.getElementById("timer");
+      const gameVideo = document.getElementById("gameVideo");
+      const selectedNumber = document.getElementById("selectedNumber");
 
       // ステージ遷移表示用の要素を追加
       const stageTransition = document.createElement("div");
@@ -514,7 +504,8 @@
             number.textContent = `÷${Math.abs(value.value)}`;
             number.classList.add("negative");
           } else {
-            number.textContent = value.value > 0 ? `+${value.value}` : value.value;
+            number.textContent =
+              value.value > 0 ? `+${value.value}` : value.value;
             number.classList.add(value.value > 0 ? "positive" : "negative");
           }
           number.dataset.value = value.value;
@@ -542,13 +533,8 @@
               clearInterval(timerInterval);
               timerInterval = null;
               gameStarted = false;
-              setTimeout(() => {
-                alert(
-                  "時間切れ！\nSTAGE " + currentStage + " に再挑戦します。"
-                );
-                resetGame(false);
-                startGame();
-              }, 100);
+              gameVideo.style.display = "block";
+              gameVideo.play();
             }
           }, 1000);
         }
@@ -556,7 +542,7 @@
 
       function startGame() {
         startButton.style.display = "none";
-        rulesButton.style.display = "none";  // ゲーム開始時にルールボタンを非表示
+        rulesButton.style.display = "none"; // ゲーム開始時にルールボタンを非表示
         if (currentStage === 1) {
           countdown.style.display = "block";
           let count = 3;
@@ -602,18 +588,28 @@
 
           if (isMultiply) {
             currentNumber *= value;
+            selectedNumber.textContent = `×${value}`;
+            selectedNumber.className = "positive";
           } else if (isDivision) {
             currentNumber = Math.floor(currentNumber / Math.abs(value));
+            selectedNumber.textContent = `÷${Math.abs(value)}`;
+            selectedNumber.className = "negative";
           } else {
             currentNumber += value;
+            selectedNumber.textContent = value > 0 ? `+${value}` : value;
+            selectedNumber.className = value > 0 ? "positive" : "negative";
           }
+          selectedNumber.classList.add("show");
+          setTimeout(() => {
+            selectedNumber.classList.remove("show");
+          }, 300);
           stickmanNumber.textContent = currentNumber;
 
           if (currentNumber < 0) {
             clearInterval(timerInterval);
             timerInterval = null;
             gameStarted = false;
-            gameOverOverlay.style.display = "block";
+            location.href = "./kou/kou3.html";
             return;
           }
 
@@ -691,7 +687,7 @@
         stickmanNumber.textContent = "";
         countdown.style.display = "none";
         startButton.style.display = resetStage ? "block" : "none";
-        rulesButton.style.display = resetStage ? "block" : "none";  // リセット時にルールボタンを表示
+        rulesButton.style.display = resetStage ? "block" : "none"; // リセット時にルールボタンを表示
       }
 
       document.addEventListener("keydown", (e) => {
@@ -736,12 +732,6 @@
         if (e.target === rulesOverlay) {
           rulesOverlay.style.display = "none";
         }
-      });
-
-      retryButton.addEventListener("click", () => {
-        gameOverOverlay.style.display = "none";
-        resetGame(false);
-        startGame();
       });
     </script>
   </body>
