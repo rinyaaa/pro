@@ -19,19 +19,35 @@ function showStageMessage(text, callback) {
 function createBar() {
   const messageText = stage === 1 ? "" : `次はステージ${stage}です`;
   showStageMessage(messageText, () => {
-    // ステージが10を超えているかチェックする
-    if (stage > 10) {
+    function clearGame(reason) {
       alert(
         `ゲームクリア！全てのステージをクリアしました！\n最終ポイント: ${point}`
       );
-      stageMessage.textContent = `ゲームクリア！全てのステージをクリアしました！\n最終ポイント: ${point}`;
-      const game1Score = parseInt(localStorage.getItem("game1"), 10) || 0;
+      if ((reason = "clear")) {
+        stageMessage.textContent = `ゲームクリア！全てのステージをクリアしました！\n最終ポイント: ${point}`;
+      } else if (reason === "timeout") {
+        stageMessage.textContent = `タイムアップしましt！\n最終ポイント: ${point}`;
+      }
 
+      const game1Score = parseInt(localStorage.getItem("game1"), 10) || 0;
       const newTotalScore = game1Score + point;
       localStorage.setItem("game1", newTotalScore.toString());
+      location.href = "kou.html";
+    }
 
-      location.href = "kou.html"; // 広告へ
-      return; // ここで関数の実行を停止
+    const randomTimeout =
+      Math.floor(Math.random() * (20000 - 10000 + 1)) + 10000;
+
+    if (!window.clearGameTimeout) {
+      window.clearGameTimeout = setTimeout(() => {
+        clearGame("timeout");
+      }, randomTimeout);
+    }
+
+    // ステージが10を超えているかチェックする
+    if (stage > 10) {
+      clearGame("clear");
+      return;
     }
 
     const bar = document.createElement("div");

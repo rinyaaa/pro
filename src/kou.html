@@ -26,11 +26,19 @@
         cursor: pointer;
         z-index: 10;
       }
+
+      #homeBtn {
+        position: relative;
+        left: 90%;
+      }
     </style>
   </head>
   <body>
     <img src="./image.png" />
-    <button onclick="backHome('home.html')">ホーム画面へ</button>
+
+    <button id="homeBtn" onclick="backHome('home.html')" style="display: none">
+      ホーム画面へ
+    </button>
 
     <div class="videoWrapper">
       <video id="gameVideo" muted playsinline></video>
@@ -38,6 +46,25 @@
     </div>
 
     <script>
+      const allScore = localStorage.getItem("allScore");
+
+      let showHomeButton;
+
+      if (allScore <= 30) {
+        showHomeButton = 30000;
+      } else if (allScore <= 50) {
+        showHomeButton = 25000;
+      } else if (allScore <= 99) {
+        showHomeButton = 20000;
+      } else {
+        showHomeButton = 15000;
+      }
+      window.onload = function () {
+        setTimeout(function () {
+          document.getElementById("homeBtn").style.display = "inline-block";
+        }, showHomeButton);
+      };
+
       const video = document.getElementById("gameVideo");
       let hasUnmuted = false;
 

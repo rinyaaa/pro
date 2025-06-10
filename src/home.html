@@ -40,7 +40,7 @@
 
       <div class="left">
         <div class="gameContainer purple">
-          <h3>ボム</h3>
+          <h3>ギリギリストップ</h3>
           <p class="maxScore">
             <span class="maxNumber"></span>
           </p>
@@ -56,7 +56,7 @@
             <span class="maxNumber"></span>
           </p>
           <p id="game4lastScore"><span class="lastNumber"></span></p>
-          <button onclick="startGame('index.html')">プレイ</button>
+          <button onclick="startGame('game4.html')">プレイ</button>
         </div>
       </div>
     </div>
@@ -73,6 +73,8 @@
       const game4 = parseInt(localStorage.getItem("game4"), 10) || 0;
 
       const kei = game1 + game2 + game3 + game4;
+
+      localStorage.setItem("allScore",kei)
 
       const game1ScoreElement = document.getElementById("game1lastScore");
       const game2ScoreElement = document.getElementById("game2lastScore");
