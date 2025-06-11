@@ -80,8 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
           scoreDisplay.style.fontSize = "28px";
           scoreDisplay.style.fontWeight = "bold";
 
+          clearTimeout(timerId);
+          shrinking = false;
+          toggleButton.textContent = "スタート";
+
           // 火花を非表示にする
           document.getElementById("spark").style.display = "none";
+
+          // ここで5秒後にページ遷移
+          setTimeout(() => {
+            location.href = "./kou/kou4.html";
+          }, 1000);
 
           // ここで爆弾も非表示にする
           bombImage.style.display = "none";
@@ -134,6 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
         score = "😅早過ぎます！1点！😅";
       }
 
+      if (diff <= 0) {
+        // ...爆発処理...
+        setTimeout(() => {
+          location.href = "./kou/kou4.html";
+        }, 5000);
+      }
+
       // localStorageに保存されているこれまでの合計スコアを取得し、数値に変換
       const currentTotalScore =
         parseInt(localStorage.getItem("game3"), 10) || 0;
@@ -148,9 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
       scoreDisplay.style.fontSize = "28px"; //フォントサイズ
       scoreDisplay.style.fontWeight = "bold";
 
-      clearTimeout(timerId);
+      // clearTimeout(timerId);
       shrinking = false;
-      toggleButton.textContent = "スタート";
+      setTimeout(() => {
+        location.href = "./kou/kou4.html";
+      }, 5000);
 
       // 火花を非表示にする
       document.getElementById("spark").style.display = "none";

@@ -8,12 +8,12 @@
       * {
         margin: 0;
         padding: 0;
-        inset: 0;
       }
       .videoWrapper {
         position: relative;
+        top: 3px;
         width: 100%;
-        height: 90vh;
+        height: 98vh;
       }
 
       .videoWrapper video {
@@ -33,22 +33,21 @@
       }
 
       #homeBtn {
-        position: relative;
-        left: 90%;
+        position: fixed;
+        top: 11.5px;
+        left: 97%;
+        z-index: 100;
+        width: 30px;
       }
     </style>
   </head>
   <body>
-    <img src="./image.png" />
-
-    <button
+    <img
+      src="../img/home.svg"
       id="homeBtn"
       onclick="backHome('../home.html')"
       style="display: none"
-    >
-      ホーム画面へ
-    </button>
-
+    />
     <div class="videoWrapper">
       <video id="gameVideo" muted playsinline></video>
       <div class="clickLayer" onclick="handleClick()"></div>
@@ -82,7 +81,7 @@
       //小野木の広告非表示
       const videoOptions = [
         { video: "../mov/game2.mov", target: "../test8.html" },
-        { video: "../mov/game3.mov", target: "./index.html" },
+        { video: "../mov/game3.mov", target: "../index.html" },
         // { video: "./mov/game4.mov", target: "index3.html" },
       ];
 
